@@ -84,7 +84,7 @@ class UserDetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // ── Avatar ──
+                // Avatar
                 CircleAvatar(
                   radius: 56,
                   backgroundImage: user.avatar.isNotEmpty
@@ -96,7 +96,7 @@ class UserDetailScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
 
-                // ── Name ──
+                // Name
                 Text(
                   user.fullName,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -105,7 +105,7 @@ class UserDetailScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
 
-                // ── Job ──
+                // Job
                 if (user.job != null && user.job!.isNotEmpty)
                   Text(
                     user.job!,
@@ -116,10 +116,9 @@ class UserDetailScreen extends StatelessWidget {
                   ),
 
                 const SizedBox(height: 32),
-                const Divider(),
                 const SizedBox(height: 16),
 
-                // ── Info rows ──
+                // Info rows
                 _InfoRow(icon: Icons.badge, label: 'ID', value: '#${user.id}'),
                 if (user.email.isNotEmpty)
                   _InfoRow(
@@ -137,7 +136,7 @@ class UserDetailScreen extends StatelessWidget {
 
                 const SizedBox(height: 32),
 
-                // ── Loading indicator during delete ──
+                // Loading indicator during delete
                 if (provider.isLoading)
                   const CircularProgressIndicator(),
               ],
@@ -149,9 +148,7 @@ class UserDetailScreen extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────
 // Info row widget
-// ─────────────────────────────────────────
 class _InfoRow extends StatelessWidget {
   final IconData icon;
   final String label;

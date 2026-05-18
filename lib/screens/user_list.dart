@@ -97,19 +97,24 @@ class _UserListScreenState extends State<UserListScreen> {
                     onDismiss: provider.clearError,
                   ),
                 Expanded(
-                  child: ListView.builder(
+                  child: GridView.builder(
                     controller: _scrollController,
+                    padding: const EdgeInsets.all(12),
                     itemCount:
                         provider.users.length + (provider.hasMorePages ? 1 : 0),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                      childAspectRatio: 0.85,
+                    ),
                     itemBuilder: (context, index) {
                       // Bottom loader
                       if (index == provider.users.length) {
-                        return const Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Center(child: CircularProgressIndicator()),
-                        );
+                        return const Center(child: CircularProgressIndicator());
                       }
-                      return _UserCard(user: provider.users[index]);
+                      return _UserGridCard(user: provider.users[index]);
                     },
                   ),
                 ),
@@ -122,32 +127,65 @@ class _UserListScreenState extends State<UserListScreen> {
   }
 }
 
-// User Card Widget
-class _UserCard extends StatelessWidget {
+// User Grid Card Widget
+class _UserGridCard extends StatelessWidget {
   final User user;
-  const _UserCard({required this.user});
+  const _UserGridCard({required this.user});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundImage:
-              user.avatar.isNotEmpty ? NetworkImage(user.avatar) : null,
-          child: user.avatar.isEmpty ? const Icon(Icons.person) : null,
+    final avatar = user.avatar;
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border.fromBorderSide(
+          BorderSide(color: Colors.black, width: 1.0),
         ),
-        title: Text(user.fullName),
-        subtitle: Text(user.email.isNotEmpty ? user.email : user.job ?? ''),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => UserDetailScreen(user: user),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            offset: Offset(2, 2),
+            blurRadius: 4,
+          ),
+        ],
+      ),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => UserDetailScreen(user: user),
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 28,
+                  backgroundImage:
+                      avatar.isNotEmpty ? NetworkImage(avatar) : null,
+                  child: avatar.isEmpty ? const Icon(Icons.person) : null,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  user.fullName,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
